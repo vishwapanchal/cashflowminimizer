@@ -95,65 +95,8 @@
         footer {
             text-align: center;
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 20px;
             color: #004d40;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            h1 {
-                font-size: 1.5em;
-            }
-
-            .flex-container {
-                flex-direction: column;
-            }
-
-            .flex-item {
-                min-width: 100%;
-            }
-
-            button {
-                font-size: 16px;
-            }
-
-            table {
-                font-size: 12px;
-            }
-
-            footer {
-                font-size: 12px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 1.3em;
-            }
-
-            select, input[type="text"], button {
-                font-size: 12px;
-            }
-
-            label {
-                font-size: 12px;
-            }
-
-            .section {
-                margin-bottom: 15px;
-            }
-
-            table {
-                font-size: 10px;
-            }
-
-            footer {
-                font-size: 10px;
-            }
         }
     </style>
 </head>
@@ -224,7 +167,7 @@
             "National_Australia_Bank": ["AliPay", "Paytm"],
         };
 
-        const banks = [];
+        const banks = ["World_Bank"]; // Adding World_Bank by default
         const transactions = [];
         const netAmounts = {};
         const graph = [];
@@ -285,15 +228,40 @@
 
                 const commonModes = predefinedBanks[debtor].filter(mode => predefinedBanks[creditor].includes(mode));
 
+                // Create the result row
+                let resultRow = [];
                 if (commonModes.length > 0) {
-                    results.push(`${debtor} -> ${creditor}: Rs ${amount} via (${commonModes.join(", ")})`);
+                    resultRow = [`${debtor} -> ${creditor}: Rs ${amount}`, `via (${commonModes.join(", ")})`];
                 } else {
-                    results.push(`${debtor} -> World_Bank: Rs ${amount} via (${predefinedBanks[debtor].join(", ")})`);
-                    results.push(`World_Bank -> ${creditor}: Rs ${amount} via (${predefinedBanks[creditor].join(", ")})`);
+                    resultRow = [`${debtor} -> World_Bank: Rs ${amount}`, `via (${predefinedBanks[debtor].join(", ")})`];
+                    resultRow.push(`World_Bank -> ${creditor}: Rs ${amount}`, `via (${predefinedBanks[creditor].join(", ")})`);
                 }
+                results.push(resultRow);
             }
 
-            document.getElementById("results").innerHTML = results.join("<br>");
+            // Create a table to display the results
+            const resultsTable = document.createElement("table");
+            resultsTable.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Transaction</th>
+                        <th>Payment Mode(s)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${results.map(result => `
+                        <tr>
+                            <td>${result[0]}</td>
+                            <td>${result[1]}</td>
+                        </tr>
+                    `).join("")}
+                </tbody>
+            `;
+
+            // Clear previous results and append the new table
+            const resultContainer = document.getElementById("results");
+            resultContainer.innerHTML = "";
+            resultContainer.appendChild(resultsTable);
         }
 
         // Initialize the dropdown with predefined banks
