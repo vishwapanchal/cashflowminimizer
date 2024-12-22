@@ -97,6 +97,24 @@
             margin-top: 20px;
             font-size: 14px;
             color: #004d40;
+            font-weight: bold; /* Make the text bold */
+            animation: highlight 2s infinite; /* Apply the highlight animation */
+        }
+
+        /* Keyframes for animation */
+        @keyframes highlight {
+            0% {
+                background-color: #004d40;
+                color: #ffffff;
+            }
+            50% {
+                background-color: #ffffff;
+                color: #004d40;
+            }
+            100% {
+                background-color: #004d40;
+                color: #ffffff;
+            }
         }
 
         /* Responsive Design */
