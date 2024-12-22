@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Flow Minimizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #004d40;
+            text-align: center;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #004d40;
+        }
+
+        select, input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #00796b;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .flex-item {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th, td {
+            border: 1px solid #cccccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #004d40;
+            color: white;
+        }
+
+        #results {
+            background-color: #e0f7fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-y: auto;
+            max-height: 200px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #004d40;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .flex-container {
+                flex-direction: column;
+            }
+
+            .flex-item {
+                min-width: 100%;
+            }
+
+            button {
+                font-size: 16px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            footer {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.3em;
+            }
+
+            select, input[type="text"], button {
+                font-size: 12px;
+            }
+
+            label {
+                font-size: 12px;
+            }
+
+            .section {
+                margin-bottom: 15px;
+            }
+
+            table {
+                font-size: 10px;
+            }
+
+            footer {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cash Flow Minimizer</h1>
+
+        <div class="flex-container">
+            <div class="flex-item">
+                <div class="section" id="bank-section">
+                    <h2>Banks</h2>
+                    <label for="bank-dropdown">Select Predefined Bank:</label>
+                    <select id="bank-dropdown"></select>
+                    <button onclick="addBank()">Add Bank</button>
+
+                    <h3>Added Banks</h3>
+                    <ul id="bank-list"></ul>
+                </div>
+            </div>
+
+            <div class="flex-item">
+                <div class="section" id="transaction-section">
+                    <h2>Transactions</h2>
+                    <label for="debtor-dropdown">Debtor Bank:</label>
+                    <select id="debtor-dropdown"></select>
+
+                    <label for="creditor-dropdown">Creditor Bank:</label>
+                    <select id="creditor-dropdown"></select>
+
+                    <label for="amount">Amount:</label>
+                    <input type="text" id="amount" placeholder="Enter amount">
+
+                    <button onclick="addTransaction()">Add Transaction</button>
+                    <h3>Transactions</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Debtor</th>
+                                <th>Creditor</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transaction-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="flex-item">
+                <div class="section" id="result-section">
+                    <h2>Results</h2>
+                    <button onclick="minimizeFlow()">Minimize Cash Flow</button>
+                    <div id="results"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>Project developed by Vishwa Panchal - RVCE24BIS403</footer>
+
+    <script>
+        const predefinedBanks = {
+            "World_Bank": ["Google_Pay", "AliPay", "Paytm"],
+            "Bank_of_America": ["Google_Pay", "AliPay", "Paytm"],
+            "Wells_Fargo": ["Google_Pay", "AliPay"],
+            "Royal_Bank_of_Canada": ["AliPay"],
+            "Westpac": ["Google_Pay", "Paytm"],
+            "Goldman_Sachs": ["Paytm"],
+            "National_Australia_Bank": ["AliPay", "Paytm"],
+        };
+
+        const banks = [];
+        const transactions = [];
+        const netAmounts = {};
+        const graph = [];
+
+        function populateDropdown() {
+            const dropdown = document.getElementById("bank-dropdown");
+            dropdown.innerHTML = Object.keys(predefinedBanks).map(
+                bank => `<option value="${bank}">${bank}</option>`
+            ).join("");
+        }
+
+        function addBank() {
+            const bankName = document.getElementById("bank-dropdown").value;
+            if (!bankName || banks.includes(bankName)) return;
+
+            banks.push(bankName);
+            netAmounts[bankName] = 0;
+
+            graph.push(new Array(banks.length).fill(0));
+            graph.forEach(row => row.push(0));
+
+            document.getElementById("bank-list").innerHTML += `<li>${bankName} - ${predefinedBanks[bankName].join(", ")}</li>`;
+
+            const options = banks.map(bank => `<option value="${bank}">${bank}</option>`).join("");
+            document.getElementById("debtor-dropdown").innerHTML = options;
+            document.getElementById("creditor-dropdown").innerHTML = options;
+        }
+
+        function addTransaction() {
+            const debtor = document.getElementById("debtor-dropdown").value;
+            const creditor = document.getElementById("creditor-dropdown").value;
+            const amount = parseFloat(document.getElementById("amount").value);
+
+            if (!debtor || !creditor || debtor === creditor || isNaN(amount)) return;
+
+            transactions.push({ debtor, creditor, amount });
+            graph[banks.indexOf(debtor)][banks.indexOf(creditor)] += amount;
+
+            document.getElementById("transaction-list").innerHTML += `<tr><td>${debtor}</td><td>${creditor}</td><td>${amount}</td></tr>`;
+        }
+
+        function minimizeFlow() {
+            banks.forEach((_, i) => {
+                banks.forEach((_, j) => {
+                    netAmounts[banks[i]] -= graph[i][j];
+                    netAmounts[banks[j]] += graph[i][j];
+                });
+            });
+
+            const results = [];
+            while (Object.values(netAmounts).some(amount => Math.abs(amount) > 1e-6)) {
+                const debtor = banks.find(bank => netAmounts[bank] < 0);
+                const creditor = banks.find(bank => netAmounts[bank] > 0);
+                const amount = Math.min(-netAmounts[debtor], netAmounts[creditor]);
+
+                netAmounts[debtor] += amount;
+                netAmounts[creditor] -= amount;
+
+                const commonModes = predefinedBanks[debtor].filter(mode => predefinedBanks[creditor].includes(mode));
+
+                if (commonModes.length > 0) {
+                    results.push(`${debtor} -> ${creditor}: Rs ${amount} via (${commonModes.join(", ")})`);
+                } else {
+                    results.push(`${debtor} -> World_Bank: Rs ${amount} via (${predefinedBanks[debtor].join(", ")})`);
+                    results.push(`World_Bank -> ${creditor}: Rs ${amount} via (${predefinedBanks[creditor].join(", ")})`);
+                }
+            }
+
+            document.getElementById("results").innerHTML = results.join("<br>");
+        }
+
+        // Initialize the dropdown with predefined banks
+        populateDropdown();
+    </script>
+</body>
+</html>
