@@ -27,6 +27,10 @@
             text-align: center;
         }
 
+        h2 {
+            color: #00796b;
+        }
+
         .section {
             margin-bottom: 20px;
         }
@@ -92,18 +96,15 @@
             max-height: 200px;
         }
 
-footer {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 20px; /* Increased font size */
-    color: #004d40;
-    font-weight: bold; /* Make the text bold */
-    animation: highlight 2s infinite; /* Apply the highlight animation */
-}
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            color: #004d40;
+            font-weight: bold;
+            animation: highlight 2s infinite;
+        }
 
-
-
-        /* Keyframes for animation */
         @keyframes highlight {
             0% {
                 background-color: #004d40;
@@ -119,7 +120,6 @@ footer {
             }
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -181,6 +181,23 @@ footer {
     <div class="container">
         <h1>Cash Flow Minimizer</h1>
 
+        <!-- Short Description -->
+        <div class="section">
+            <p><strong>Description:</strong> This tool helps to minimize cash flow between banks by calculating optimal transactions. It works by adding banks, recording transactions, and minimizing the cash flow based on predefined bank modes (like Google Pay, Paytm, etc.).</p>
+        </div>
+
+        <!-- Short Tips Section -->
+        <div class="section">
+            <h2>How to Use:</h2>
+            <ul>
+                <li>1. Select a predefined bank from the dropdown menu.</li>
+                <li>2. Add a bank to the system.</li>
+                <li>3. Record transactions between debtor and creditor banks with a specific amount.</li>
+                <li>4. Click on "Minimize Cash Flow" to view optimized transactions.</li>
+                <li>5. Use the available payment modes to find the best transaction route.</li>
+            </ul>
+        </div>
+
         <div class="flex-container">
             <div class="flex-item">
                 <div class="section" id="bank-section">
@@ -229,9 +246,9 @@ footer {
                 </div>
             </div>
         </div>
-    </div>
 
-    <footer>Project developed by Vishwa Panchal - RVCE24BIS403</footer>
+        <footer>Project developed by Vishwa Panchal - RVCE24BIS403</footer>
+    </div>
 
     <script>
         const predefinedBanks = {
@@ -316,7 +333,6 @@ footer {
             document.getElementById("results").innerHTML = results.join("<br>");
         }
 
-        // Initialize the dropdown with predefined banks
         populateDropdown();
     </script>
 </body>
