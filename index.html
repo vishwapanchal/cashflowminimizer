@@ -98,18 +98,6 @@
             font-size: 20px;
             color: #004d40;
             font-weight: bold;
-            animation: highlight 2s infinite;
-        }
-
-        @keyframes highlight {
-            0%, 100% {
-                background-color: #004d40;
-                color: #ffffff;
-            }
-            50% {
-                background-color: #ffffff;
-                color: #004d40;
-            }
         }
 
         @media (max-width: 768px) {
@@ -133,34 +121,17 @@
 </head>
 <body>
     <div class="container">
-        <h1>Cash Flow Minimizer</h1>
+        <h1 id="title">Cash Flow Minimizer</h1>
         
-        <div class="section">
-            <h2>How to Use</h2>
-            <ol>
-                <li>Select banks from the dropdown and add them to the list.</li>
-                <li>Add transactions by choosing debtor, creditor, and amount.</li>
-                <li>Click "Minimize Cash Flow" to see optimized results.</li>
-            </ol>
-        </div>
+        <button onclick="toggleLanguage()">Switch to Kannada</button>
 
         <div class="section">
-            <h2>Example:</h2>
-            <details>
-                <summary>See an example of how this app works</summary>
-                <p><strong>Scenario:</strong> Imagine three banks: <em>Bank A</em>, <em>Bank B</em>, and <em>Bank C</em>. Transactions occur as follows:</p>
-                <ul>
-                    <li><em>Bank A</em> owes <em>Bank B</em> Rs 1000</li>
-                    <li><em>Bank B</em> owes <em>Bank C</em> Rs 1500</li>
-                    <li><em>Bank C</em> owes <em>Bank A</em> Rs 500</li>
-                </ul>
-                <p><strong>Output:</strong> After minimizing cash flow:</p>
-                <ul>
-                    <li><em>Bank A</em> -> <em>Bank B</em>: Rs 500</li>
-                    <li><em>Bank B</em> -> <em>Bank C</em>: Rs 1000</li>
-                </ul>
-                <p>This minimizes redundant transactions and optimizes cash flow efficiently.</p>
-            </details>
+            <h2 id="how-to-title">How to Use</h2>
+            <ol id="instructions">
+                <li>Select banks from the dropdown and add them to the list.</li>
+                <li>Add transactions by choosing who will give money and who will receive it, along with the amount.</li>
+                <li>Click "Minimize Cash Flow" to see simplified transactions.</li>
+            </ol>
         </div>
 
         <div class="flex-container">
@@ -179,10 +150,10 @@
             <div class="flex-item">
                 <div class="section" id="transaction-section">
                     <h2>Transactions</h2>
-                    <label for="debtor-dropdown">Debtor Bank:</label>
+                    <label for="debtor-dropdown">Who Gives Money:</label>
                     <select id="debtor-dropdown"></select>
 
-                    <label for="creditor-dropdown">Creditor Bank:</label>
+                    <label for="creditor-dropdown">Who Receives Money:</label>
                     <select id="creditor-dropdown"></select>
 
                     <label for="amount">Amount:</label>
@@ -193,8 +164,8 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Debtor</th>
-                                <th>Creditor</th>
+                                <th>Gives</th>
+                                <th>Receives</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
@@ -230,6 +201,7 @@
         const transactions = [];
         const netAmounts = {};
         const graph = [];
+        let isKannada = false;
 
         function populateDropdown() {
             const dropdown = document.getElementById("bank-dropdown");
@@ -288,14 +260,23 @@
                 const commonModes = predefinedBanks[debtor].filter(mode => predefinedBanks[creditor].includes(mode));
 
                 if (commonModes.length > 0) {
-                    results.push(`${debtor} -> ${creditor}: Rs ${amount} via (${commonModes.join(", ")})`);
+                    results.push(`${debtor} gives ${creditor} Rs ${amount} via (${commonModes.join(", ")})`);
                 } else {
-                    results.push(`${debtor} -> World_Bank: Rs ${amount} via (${predefinedBanks[debtor].join(", ")})`);
-                    results.push(`World_Bank -> ${creditor}: Rs ${amount} via (${predefinedBanks[creditor].join(", ")})`);
+                    results.push(`${debtor} gives World_Bank Rs ${amount} via (${predefinedBanks[debtor].join(", ")})`);
+                    results.push(`World_Bank gives ${creditor} Rs ${amount} via (${predefinedBanks[creditor].join(", ")})`);
                 }
             }
 
             document.getElementById("results").innerHTML = results.join("<br>");
+        }
+
+        function toggleLanguage() {
+            isKannada = !isKannada;
+            document.getElementById("title").textContent = isKannada ? "ಹಣದ ಹರಿವು ಕಡಿಮೆಗೊಳಿಸಿ" : "Cash Flow Minimizer";
+            document.getElementById("how-to-title").textContent = isKannada ? "ಹೇಗಿರಲಿ" : "How to Use";
+            document.getElementById("instructions").innerHTML = isKannada 
+                ? "<li>ಬ್ಯಾಂಕ್ ಆಯ್ಕೆ ಮಾಡಿ ಮತ್ತು ಪಟ್ಟಿಗೆ ಸೇರಿಸಿ.</li><li>ಯಾರು ಹಣ ಕೊಡುತ್ತಾರೆ ಮತ್ತು ಯಾರು ಸ್ವೀಕರಿಸುತ್ತಾರೆ ಎಂಬುದನ್ನು ಸೇರಿಸಿ.</li><li>'ಹಣದ ಹರಿವು ಕಡಿಮೆಗೊಳಿಸಿ' ಕ್ಲಿಕ್ ಮಾಡಿ.</li>"
+                : "<li>Select banks from the dropdown and add them to the list.</li><li>Add transactions by choosing who will give money and who will receive it, along with the amount.</li><li>Click 'Minimize Cash Flow' to see simplified transactions.</li>";
         }
 
         populateDropdown();
