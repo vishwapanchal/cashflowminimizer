@@ -6,53 +6,70 @@
     <title>Cash Flow Minimizer</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            color: #333;
         }
 
         .container {
             max-width: 1200px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
 
         h1 {
             color: #004d40;
             text-align: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
         }
 
         h2 {
-            color: #004d40;
+            color: #00695c;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
         }
 
         p {
-            color: #333333;
-        }
-
-        label, select, input[type="text"], button {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 4px;
-            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
         }
 
         button {
             background-color: #00796b;
-            color: white;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
         }
 
         button:hover {
             background-color: #004d40;
+        }
+
+        .btn-secondary {
+            background-color: #555;
+        }
+
+        .btn-secondary:hover {
+            background-color: #333;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
         }
 
         .flex-container {
@@ -64,29 +81,33 @@
         .flex-item {
             flex: 1;
             min-width: 300px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
+            margin: 15px 0;
         }
 
         th, td {
-            border: 1px solid #cccccc;
-            padding: 10px;
             text-align: left;
+            padding: 10px;
+            border: 1px solid #ccc;
         }
 
         th {
-            background-color: #004d40;
+            background-color: #00695c;
             color: white;
         }
 
         #results {
-            background-color: #e0f7fa;
+            background-color: #e8f5e9;
             padding: 10px;
-            border-radius: 4px;
+            border-radius: 5px;
             overflow-y: auto;
             max-height: 200px;
         }
@@ -94,9 +115,27 @@
         footer {
             text-align: center;
             margin-top: 20px;
-            font-size: 16px;
-            color: #004d40;
-            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .flex-container {
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            button {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -104,15 +143,17 @@
     <div class="container">
         <h1 id="title">Cash Flow Minimizer</h1>
 
-        <button onclick="toggleLanguage()">Switch to Kannada</button>
+        <div style="text-align: right; margin-bottom: 20px;">
+            <button onclick="toggleLanguage()">Switch to Kannada</button>
+        </div>
 
         <div id="intro-section">
             <h2 id="intro-title">Introduction</h2>
             <h2 id="intro-title-kannada" style="display: none;">ಪರಿಚಯ</h2>
             <p id="intro-text">
                 This web app helps you simplify payments between people or banks. 
-                For example: If A needs to pay B Rs.100, and B needs to pay C Rs.100, instead of two payments, 
-                A can directly pay C Rs.100.
+                For example: If A owes B Rs. 100, and B owes C Rs. 100, instead of two payments, 
+                A can directly pay C Rs. 100.
             </p>
             <p id="intro-text-kannada" style="display: none;">
                 ಈ ವೆಬ್ ಆಪ್ ಹಣದ ವಹಿವಾಟುಗಳನ್ನು ಸರಳಗೊಳಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ. 
@@ -123,57 +164,52 @@
 
         <div class="flex-container">
             <div class="flex-item">
-                <div class="section" id="bank-section">
-                    <h2>Banks</h2>
-                    <label for="bank-dropdown">Select Predefined Bank:</label>
-                    <select id="bank-dropdown"></select>
-                    <button onclick="addBank()">Add Bank</button>
+                <h2>Banks</h2>
+                <label for="bank-dropdown">Select Predefined Bank:</label>
+                <select id="bank-dropdown"></select>
+                <button onclick="addBank()">Add Bank</button>
 
-                    <h3>Added Banks</h3>
-                    <ul id="bank-list"></ul>
-                </div>
+                <h3>Added Banks</h3>
+                <ul id="bank-list"></ul>
             </div>
 
             <div class="flex-item">
-                <div class="section" id="transaction-section">
-                    <h2>Transactions</h2>
-                    <label for="debtor-dropdown">Debtor Bank:</label>
-                    <select id="debtor-dropdown"></select>
+                <h2>Transactions</h2>
+                <label for="debtor-dropdown">Debtor Bank:</label>
+                <select id="debtor-dropdown"></select>
 
-                    <label for="creditor-dropdown">Creditor Bank:</label>
-                    <select id="creditor-dropdown"></select>
+                <label for="creditor-dropdown">Creditor Bank:</label>
+                <select id="creditor-dropdown"></select>
 
-                    <label for="amount">Amount:</label>
-                    <input type="text" id="amount" placeholder="Enter amount">
+                <label for="amount">Amount:</label>
+                <input type="text" id="amount" placeholder="Enter amount">
 
-                    <button onclick="addTransaction()">Add Transaction</button>
-                    <h3>Transactions</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Debtor</th>
-                                <th>Creditor</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transaction-list"></tbody>
-                    </table>
-                </div>
+                <button onclick="addTransaction()">Add Transaction</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Debtor</th>
+                            <th>Creditor</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transaction-list"></tbody>
+                </table>
             </div>
 
             <div class="flex-item">
-                <div class="section" id="result-section">
-                    <h2>Results</h2>
-                    <button onclick="minimizeFlow()">Minimize Cash Flow</button>
-                    <div id="results"></div>
-                </div>
+                <h2>Results</h2>
+                <button onclick="minimizeFlow()">Minimize Cash Flow</button>
+                <div id="results"></div>
             </div>
         </div>
     </div>
 
-    <footer>Project developed by Vishwa Panchal - RVCE</footer>
+    <footer>Project by Vishwa Panchal</footer>
 
     <script>
+        // JavaScript code remains the same as the previous version
+        // Predefined banks, adding banks, transactions, and results logic
         const predefinedBanks = {
             "World_Bank": ["Google_Pay", "AliPay", "Paytm"],
             "Bank_of_America": ["Google_Pay", "AliPay", "Paytm"],
