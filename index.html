@@ -6,134 +6,119 @@
     <title>Cash Flow Minimizer</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
-            color: #333;
         }
 
         .container {
             max-width: 1200px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
-            color: #004d40;
+            color: #00796b;
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 10px;
         }
 
-        h2 {
-            color: #00695c;
-            margin-bottom: 10px;
-            font-size: 1.5rem;
+        .section {
+            margin-bottom: 20px;
         }
 
-        p {
-            color: #555;
-            margin-bottom: 15px;
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #00796b;
+        }
+
+        select, input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
         }
 
         button {
             background-color: #00796b;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
+            color: white;
             cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
         }
 
         button:hover {
-            background-color: #004d40;
-        }
-
-        .btn-secondary {
-            background-color: #555;
-        }
-
-        .btn-secondary:hover {
-            background-color: #333;
-        }
-
-        input[type="text"], select {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .flex-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .flex-item {
-            flex: 1;
-            min-width: 300px;
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #00564d;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 15px 0;
         }
 
         th, td {
-            text-align: left;
-            padding: 10px;
             border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
         }
 
         th {
-            background-color: #00695c;
+            background-color: #00796b;
             color: white;
         }
 
         #results {
-            background-color: #e8f5e9;
+            background-color: #e0f7fa;
             padding: 10px;
-            border-radius: 5px;
-            overflow-y: auto;
+            border-radius: 4px;
             max-height: 200px;
+            overflow-y: auto;
         }
 
         footer {
             text-align: center;
             margin-top: 20px;
-            font-size: 14px;
-            color: #555;
+            font-size: 20px;
+            font-weight: bold;
         }
 
-        /* Responsive Design */
+        #animated-text {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                color: #00796b;
+                text-shadow: 0 0 5px #00796b;
+            }
+            50% {
+                color: #004d40;
+                text-shadow: 0 0 15px #004d40;
+            }
+            100% {
+                color: #00796b;
+                text-shadow: 0 0 5px #00796b;
+            }
+        }
+
         @media (max-width: 768px) {
-            .flex-container {
-                flex-direction: column;
+            .container {
+                padding: 10px;
             }
 
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.5em;
             }
 
-            h2 {
-                font-size: 1.2rem;
+            table {
+                font-size: 12px;
             }
 
-            button {
+            footer {
                 font-size: 14px;
             }
         }
@@ -141,75 +126,47 @@
 </head>
 <body>
     <div class="container">
-        <h1 id="title">Cash Flow Minimizer</h1>
-
-        <div style="text-align: right; margin-bottom: 20px;">
-            <button onclick="toggleLanguage()">Switch to Kannada</button>
+        <h1>Cash Flow Minimizer</h1>
+        <p id="intro-text">This web app helps you simplify payments between people or banks. For example: If A needs to pay B Rs. 100, and B needs to pay C Rs. 100, instead of two payments, A can directly pay C Rs. 100.</p>
+        <p id="intro-text-kannada" style="display: none;">ಈ ವೆಬ್ ಆಪ್ ಹಣದ ವಹಿವಾಟುಗಳನ್ನು ಸರಳಗೊಳಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ. ಉದಾಹರಣೆಗೆ: A ಗೆ B ಗೆ 100 ರೂ. ನೀಡಬೇಕಾದರೆ ಮತ್ತು B ಗೆ C ಗೆ 100 ರೂ. ನೀಡಬೇಕಾದರೆ, ಎರಡು ವಹಿವಾಟುಗಳ ಬದಲು, A ನೇರವಾಗಿ C ಗೆ 100 ರೂ. ನೀಡಬಹುದು.</p>
+        <button onclick="toggleLanguage()">Switch to Kannada</button>
+        <div class="section">
+            <h2>Banks</h2>
+            <label for="bank-dropdown">Select Predefined Bank:</label>
+            <select id="bank-dropdown"></select>
+            <button onclick="addBank()">Add Bank</button>
+            <ul id="bank-list"></ul>
         </div>
-
-        <div id="intro-section">
-            <h2 id="intro-title">Introduction</h2>
-            <h2 id="intro-title-kannada" style="display: none;">ಪರಿಚಯ</h2>
-            <p id="intro-text">
-                This web app helps you simplify payments between people or banks. 
-                For example: If A needs to pay B Rs. 100, and B needs to pay C Rs. 100, instead of two payments, 
-                A can directly pay C Rs. 100.
-            </p>
-            <p id="intro-text-kannada" style="display: none;">
-                ಈ ವೆಬ್ ಆಪ್ ಹಣದ ವಹಿವಾಟುಗಳನ್ನು ಸರಳಗೊಳಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ. 
-                ಉದಾಹರಣೆಗೆ: A ಗೆ B ಗೆ 100 ರೂ. ನೀಡಬೇಕಾದರೆ ಮತ್ತು B ಗೆ C ಗೆ 100 ರೂ. ನೀಡಬೇಕಾದರೆ, 
-                ಎರಡು ವಹಿವಾಟುಗಳ ಬದಲು, A ನೇರವಾಗಿ C ಗೆ 100 ರೂ. ನೀಡಬಹುದು.
-            </p>
+        <div class="section">
+            <h2>Transactions</h2>
+            <label for="debtor-dropdown">Debtor Bank:</label>
+            <select id="debtor-dropdown"></select>
+            <label for="creditor-dropdown">Creditor Bank:</label>
+            <select id="creditor-dropdown"></select>
+            <label for="amount">Amount:</label>
+            <input type="text" id="amount" placeholder="Enter amount">
+            <button onclick="addTransaction()">Add Transaction</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Debtor</th>
+                        <th>Creditor</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="transaction-list"></tbody>
+            </table>
         </div>
-
-        <div class="flex-container">
-            <div class="flex-item">
-                <h2>Banks</h2>
-                <label for="bank-dropdown">Select Predefined Bank:</label>
-                <select id="bank-dropdown"></select>
-                <button onclick="addBank()">Add Bank</button>
-
-                <h3>Added Banks</h3>
-                <ul id="bank-list"></ul>
-            </div>
-
-            <div class="flex-item">
-                <h2>Transactions</h2>
-                <label for="debtor-dropdown">Debtor Bank:</label>
-                <select id="debtor-dropdown"></select>
-
-                <label for="creditor-dropdown">Creditor Bank:</label>
-                <select id="creditor-dropdown"></select>
-
-                <label for="amount">Amount:</label>
-                <input type="text" id="amount" placeholder="Enter amount">
-
-                <button onclick="addTransaction()">Add Transaction</button>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Debtor</th>
-                            <th>Creditor</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transaction-list"></tbody>
-                </table>
-            </div>
-
-            <div class="flex-item">
-                <h2>Results</h2>
-                <button onclick="minimizeFlow()">Minimize Cash Flow</button>
-                <div id="results"></div>
-            </div>
+        <div class="section">
+            <h2>Results</h2>
+            <button onclick="minimizeFlow()">Simplify Payments</button>
+            <div id="results"></div>
         </div>
     </div>
-
-    <footer>Project by Vishwa Panchal</footer>
-
+    <footer>
+        <span id="animated-text">Project made by Vishwa Panchal</span>
+    </footer>
     <script>
-        // JavaScript code remains the same as the previous version
-        // Predefined banks, adding banks, transactions, and results logic
         const predefinedBanks = {
             "World_Bank": ["Google_Pay", "AliPay", "Paytm"],
             "Bank_of_America": ["Google_Pay", "AliPay", "Paytm"],
@@ -224,7 +181,6 @@
         const transactions = [];
         const netAmounts = {};
         const graph = [];
-        let isKannada = false;
 
         function populateDropdown() {
             const dropdown = document.getElementById("bank-dropdown");
@@ -236,18 +192,11 @@
         function addBank() {
             const bankName = document.getElementById("bank-dropdown").value;
             if (!bankName || banks.includes(bankName)) return;
-
             banks.push(bankName);
             netAmounts[bankName] = 0;
-
             graph.push(new Array(banks.length).fill(0));
             graph.forEach(row => row.push(0));
-
             document.getElementById("bank-list").innerHTML += `<li>${bankName}</li>`;
-            updateDropdowns();
-        }
-
-        function updateDropdowns() {
             const options = banks.map(bank => `<option value="${bank}">${bank}</option>`).join("");
             document.getElementById("debtor-dropdown").innerHTML = options;
             document.getElementById("creditor-dropdown").innerHTML = options;
@@ -257,12 +206,9 @@
             const debtor = document.getElementById("debtor-dropdown").value;
             const creditor = document.getElementById("creditor-dropdown").value;
             const amount = parseFloat(document.getElementById("amount").value);
-
             if (!debtor || !creditor || debtor === creditor || isNaN(amount)) return;
-
             transactions.push({ debtor, creditor, amount });
             graph[banks.indexOf(debtor)][banks.indexOf(creditor)] += amount;
-
             document.getElementById("transaction-list").innerHTML += `<tr><td>${debtor}</td><td>${creditor}</td><td>${amount}</td></tr>`;
         }
 
@@ -273,30 +219,34 @@
                     netAmounts[banks[j]] += graph[i][j];
                 });
             });
-
             const results = [];
             while (Object.values(netAmounts).some(amount => Math.abs(amount) > 1e-6)) {
                 const debtor = banks.find(bank => netAmounts[bank] < 0);
                 const creditor = banks.find(bank => netAmounts[bank] > 0);
                 const amount = Math.min(-netAmounts[debtor], netAmounts[creditor]);
-
                 netAmounts[debtor] += amount;
                 netAmounts[creditor] -= amount;
-
-                results.push(`${debtor} pays ${creditor} Rs. ${amount}`);
+                const commonModes = predefinedBanks[debtor].filter(mode => predefinedBanks[creditor].includes(mode));
+                if (commonModes.length > 0) {
+                    results.push(`${debtor} needs to pay ${creditor}: Rs ${amount} using (${commonModes.join(", ")})`);
+                } else {
+                    results.push(`${debtor} needs to pay World_Bank: Rs ${amount} using (${predefinedBanks[debtor].join(", ")})`);
+                    results.push(`World_Bank needs to pay ${creditor}: Rs ${amount} using (${predefinedBanks[creditor].join(", ")})`);
+                }
             }
-
             document.getElementById("results").innerHTML = results.join("<br>");
         }
 
         function toggleLanguage() {
-            isKannada = !isKannada;
-
-            document.getElementById("title").textContent = isKannada ? "ಹಣದ ಹರಿವು ಕಡಿಮೆಗೊಳಿಸಿ" : "Cash Flow Minimizer";
-            document.getElementById("intro-title").style.display = isKannada ? "none" : "block";
-            document.getElementById("intro-title-kannada").style.display = isKannada ? "block" : "none";
-            document.getElementById("intro-text").style.display = isKannada ? "none" : "block";
-            document.getElementById("intro-text-kannada").style.display = isKannada ? "block" : "none";
+            const introText = document.getElementById("intro-text");
+            const introTextKannada = document.getElementById("intro-text-kannada");
+            if (introText.style.display === "none") {
+                introText.style.display = "block";
+                introTextKannada.style.display = "none";
+            } else {
+                introText.style.display = "none";
+                introTextKannada.style.display = "block";
+            }
         }
 
         populateDropdown();
