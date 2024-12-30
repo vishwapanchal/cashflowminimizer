@@ -27,20 +27,19 @@
             text-align: center;
         }
 
-        .section {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
+        h2 {
             color: #004d40;
         }
 
-        select, input[type="text"], button {
+        p {
+            color: #333333;
+        }
+
+        label, select, input[type="text"], button {
+            display: block;
             width: 100%;
-            padding: 10px;
             margin-bottom: 10px;
+            padding: 10px;
             border: 1px solid #cccccc;
             border-radius: 4px;
             font-size: 14px;
@@ -95,43 +94,31 @@
         footer {
             text-align: center;
             margin-top: 20px;
-            font-size: 20px;
+            font-size: 16px;
             color: #004d40;
             font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            h1 {
-                font-size: 1.5em;
-            }
-
-            .flex-container {
-                flex-direction: column;
-            }
-
-            .flex-item {
-                min-width: 100%;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 id="title">Cash Flow Minimizer</h1>
-        
+
         <button onclick="toggleLanguage()">Switch to Kannada</button>
 
-        <div class="section">
-            <h2 id="how-to-title">How to Use</h2>
-            <ol id="instructions">
-                <li>Select banks from the dropdown and add them to the list.</li>
-                <li>Add transactions by choosing who will give money and who will receive it, along with the amount.</li>
-                <li>Click "Minimize Cash Flow" to see simplified transactions.</li>
-            </ol>
+        <div id="intro-section">
+            <h2 id="intro-title">Introduction</h2>
+            <h2 id="intro-title-kannada" style="display: none;">ಪರಿಚಯ</h2>
+            <p id="intro-text">
+                This web app helps you simplify payments between people or banks. 
+                For example: If A needs to pay B Rs.100, and B needs to pay C Rs.100, instead of two payments, 
+                A can directly pay C Rs.100.
+            </p>
+            <p id="intro-text-kannada" style="display: none;">
+                ಈ ವೆಬ್ ಆಪ್ ಹಣದ ವಹಿವಾಟುಗಳನ್ನು ಸರಳಗೊಳಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ. 
+                ಉದಾಹರಣೆಗೆ: A ಗೆ B ಗೆ 100 ರೂ. ನೀಡಬೇಕಾದರೆ ಮತ್ತು B ಗೆ C ಗೆ 100 ರೂ. ನೀಡಬೇಕಾದರೆ, 
+                ಎರಡು ವಹಿವಾಟುಗಳ ಬದಲು, A ನೇರವಾಗಿ C ಗೆ 100 ರೂ. ನೀಡಬಹುದು.
+            </p>
         </div>
 
         <div class="flex-container">
@@ -150,10 +137,10 @@
             <div class="flex-item">
                 <div class="section" id="transaction-section">
                     <h2>Transactions</h2>
-                    <label for="debtor-dropdown">Who Gives Money:</label>
+                    <label for="debtor-dropdown">Debtor Bank:</label>
                     <select id="debtor-dropdown"></select>
 
-                    <label for="creditor-dropdown">Who Receives Money:</label>
+                    <label for="creditor-dropdown">Creditor Bank:</label>
                     <select id="creditor-dropdown"></select>
 
                     <label for="amount">Amount:</label>
@@ -164,8 +151,8 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Gives</th>
-                                <th>Receives</th>
+                                <th>Debtor</th>
+                                <th>Creditor</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
@@ -184,7 +171,7 @@
         </div>
     </div>
 
-    <footer>Project developed by Vishwa Panchal - RVCE24BIS403</footer>
+    <footer>Project developed by Vishwa Panchal - RVCE</footer>
 
     <script>
         const predefinedBanks = {
@@ -220,8 +207,11 @@
             graph.push(new Array(banks.length).fill(0));
             graph.forEach(row => row.push(0));
 
-            document.getElementById("bank-list").innerHTML += `<li>${bankName} - ${predefinedBanks[bankName].join(", ")}</li>`;
+            document.getElementById("bank-list").innerHTML += `<li>${bankName}</li>`;
+            updateDropdowns();
+        }
 
+        function updateDropdowns() {
             const options = banks.map(bank => `<option value="${bank}">${bank}</option>`).join("");
             document.getElementById("debtor-dropdown").innerHTML = options;
             document.getElementById("creditor-dropdown").innerHTML = options;
@@ -257,14 +247,7 @@
                 netAmounts[debtor] += amount;
                 netAmounts[creditor] -= amount;
 
-                const commonModes = predefinedBanks[debtor].filter(mode => predefinedBanks[creditor].includes(mode));
-
-                if (commonModes.length > 0) {
-                    results.push(`${debtor} gives ${creditor} Rs ${amount} via (${commonModes.join(", ")})`);
-                } else {
-                    results.push(`${debtor} gives World_Bank Rs ${amount} via (${predefinedBanks[debtor].join(", ")})`);
-                    results.push(`World_Bank gives ${creditor} Rs ${amount} via (${predefinedBanks[creditor].join(", ")})`);
-                }
+                results.push(`${debtor} pays ${creditor} Rs. ${amount}`);
             }
 
             document.getElementById("results").innerHTML = results.join("<br>");
@@ -272,11 +255,12 @@
 
         function toggleLanguage() {
             isKannada = !isKannada;
+
             document.getElementById("title").textContent = isKannada ? "ಹಣದ ಹರಿವು ಕಡಿಮೆಗೊಳಿಸಿ" : "Cash Flow Minimizer";
-            document.getElementById("how-to-title").textContent = isKannada ? "ಹೇಗಿರಲಿ" : "How to Use";
-            document.getElementById("instructions").innerHTML = isKannada 
-                ? "<li>ಬ್ಯಾಂಕ್ ಆಯ್ಕೆ ಮಾಡಿ ಮತ್ತು ಪಟ್ಟಿಗೆ ಸೇರಿಸಿ.</li><li>ಯಾರು ಹಣ ಕೊಡುತ್ತಾರೆ ಮತ್ತು ಯಾರು ಸ್ವೀಕರಿಸುತ್ತಾರೆ ಎಂಬುದನ್ನು ಸೇರಿಸಿ.</li><li>'ಹಣದ ಹರಿವು ಕಡಿಮೆಗೊಳಿಸಿ' ಕ್ಲಿಕ್ ಮಾಡಿ.</li>"
-                : "<li>Select banks from the dropdown and add them to the list.</li><li>Add transactions by choosing who will give money and who will receive it, along with the amount.</li><li>Click 'Minimize Cash Flow' to see simplified transactions.</li>";
+            document.getElementById("intro-title").style.display = isKannada ? "none" : "block";
+            document.getElementById("intro-title-kannada").style.display = isKannada ? "block" : "none";
+            document.getElementById("intro-text").style.display = isKannada ? "none" : "block";
+            document.getElementById("intro-text-kannada").style.display = isKannada ? "block" : "none";
         }
 
         populateDropdown();
